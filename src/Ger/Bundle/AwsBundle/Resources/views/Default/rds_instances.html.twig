@@ -1,0 +1,43 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <h1>RDS Instance in region: {{ region }}</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>DBInstanceIdentifier</th>
+                <th>DBInstanceClass</th>
+                <th>MasterUsername</th>
+                <th>AvailabilityZone</th>
+                <th>AllocatedStorage</th>
+                <th>Engine</th>
+                <th>EngineVersion</th>
+                <th>InstanceCreateTime</th>
+                <th>Iops</th>
+
+            </tr>
+        </thead>
+        <tbody>
+    {% for DBInstance in data.get('DBInstances') %}
+        <tr>
+                <td>{{ DBInstance.DBInstanceIdentifier }}</td>
+                <td><span class="label label-warning">{{ DBInstance.DBInstanceClass }}</span></td>
+                <td>{{ DBInstance.MasterUsername }}</td>
+                <td>{{ DBInstance.AvailabilityZone }}</td>
+                <td>{{ DBInstance.AllocatedStorage }} Go</td>
+                <td>{{ DBInstance.Engine }}</td>
+                <td>{{ DBInstance.EngineVersion }}</td>
+                <td>{{ DBInstance.InstanceCreateTime|date }}</td>
+                <td>{% if DBInstance.Iops is defined %}{{ DBInstance.Iops }} {% endif %}</td>
+
+        </tr>
+        <tr>
+            <th>Endpoint</th    >
+            <td colspan="8"><small>{{ DBInstance.Endpoint.Address }}:{{ DBInstance.Endpoint.Port }}</small></td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

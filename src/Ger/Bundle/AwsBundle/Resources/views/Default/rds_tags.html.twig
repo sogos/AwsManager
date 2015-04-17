@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <table class="table">
+        <thead>
+            <th>Name</td>
+            <th>Value</td>
+        </thead>
+{% for tag in data['TagList'] %}
+    <tr>
+        <td>{{ tag.Key }}</td>
+        <td>{{ tag.Value }}</td>
+    </tr>
+
+{% endfor %}
+
+    </table>
+{% endblock %}

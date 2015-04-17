@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ger_aws.rds_client" class="Ger\Bundle\AwsBundle\AwsServices\AwsRdsClient">
+            <argument type="service" id="ger_aws.iam_client"></argument>
+        </service>
+        <service id="ger_aws.iam_client" class="Ger\Bundle\AwsBundle\AwsServices\AwsIamClient">
+        </service>
+    </services>
+</container>

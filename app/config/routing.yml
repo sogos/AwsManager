@@ -1,0 +1,8 @@
+ger_aws:
+    resource: "@GerAwsBundle/Resources/config/routing.yml"
+    prefix:   /api/
+
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc

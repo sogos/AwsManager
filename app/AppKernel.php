@@ -17,9 +17,9 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new FOS\RestBundle\FOSRestBundle(),
-            new Ger\Bundle\AwsBundle\GerAwsBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new Sogos\Bundle\DynamoDBBundle\SogosDynamoDBBundle(),
+            new Sogos\Bundle\AwsBundle\SogosAwsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

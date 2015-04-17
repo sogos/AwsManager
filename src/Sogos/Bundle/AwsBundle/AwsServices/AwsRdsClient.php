@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Ger\Bundle\AwsBundle\AwsServices;
+namespace Sogos\Bundle\AwsBundle\AwsServices;
 
 use Aws\Rds\Exception\DBInstanceNotFoundException;
 use Aws\Rds\RdsClient;

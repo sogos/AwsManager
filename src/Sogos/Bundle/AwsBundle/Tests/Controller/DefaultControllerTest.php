@@ -1,6 +1,6 @@
 <?php
 
-namespace Ger\Bundle\AwsBundle\Tests\Controller;
+namespace Sogos\Bundle\AwsBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

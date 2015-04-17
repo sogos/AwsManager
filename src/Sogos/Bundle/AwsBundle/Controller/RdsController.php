@@ -1,6 +1,6 @@
 <?php
 
-namespace Ger\Bundle\AwsBundle\Controller;
+namespace Sogos\Bundle\AwsBundle\Controller;
 
 use Aws\Rds\Exception\DBInstanceNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -12,7 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
  * Class RdsController
- * @package Ger\Bundle\AwsBundle\Controller
+ * @package Sogos\Bundle\AwsBundle\Controller
  * @RouteResource("rds")
  */
 class RdsController extends Controller
@@ -20,7 +20,7 @@ class RdsController extends Controller
     /**
      * @return \Guzzle\Service\Resource\Model
      * @Route("/rds/{region}")
-     * @Template("GerAwsBundle:Default:rds_instances.html.twig")
+     * @Template("SogosAwsBundle:Default:rds_instances.html.twig")
      * @ApiDoc(
      *  section="RDS",
      *  resource=true,
@@ -32,7 +32,7 @@ class RdsController extends Controller
      */
     public function getAllInstancesByRegionAction($region)
     {
-        return array('region' => $region, 'data' => $this->container->get('ger_aws.rds_client')->getDBInstances($region));
+        return array('region' => $region, 'data' => $this->container->get('Sogos_aws.rds_client')->getDBInstances($region));
     }
 
     /**
@@ -50,7 +50,7 @@ class RdsController extends Controller
      */
     public function getOneInstanceByRegionAction($region, $name)
     {
-        return $this->container->get('ger_aws.rds_client')->getDBInstances($region, $name);
+        return $this->container->get('Sogos_aws.rds_client')->getDBInstances($region, $name);
     }
 
     /**
@@ -58,7 +58,7 @@ class RdsController extends Controller
      * @param $region
      * @return \Guzzle\Service\Resource\Model
      * @Route("/rds/{region}/{name}/tags")
-     * @Template("GerAwsBundle:Default:rds_tags.html.twig")
+     * @Template("SogosAwsBundle:Default:rds_tags.html.twig")
      * @ApiDoc(
      *  section="RDS",
      *  resource=true,
@@ -73,7 +73,7 @@ class RdsController extends Controller
         $this->container->get('sogos_dynamo_db.connector');
 
         try {
-            return array('data' => $this->container->get('ger_aws.rds_client')->getResourceTagsforDBInstance($region, $name));
+            return array('data' => $this->container->get('Sogos_aws.rds_client')->getResourceTagsforDBInstance($region, $name));
         } catch(DBInstanceNotFoundException $e ) {
             throw new DBInstanceNotFoundException($e->getMessage(), 500);
         }

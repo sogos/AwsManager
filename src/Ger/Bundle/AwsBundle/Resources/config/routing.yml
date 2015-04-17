@@ -1,4 +1,0 @@
-rds_resources:
-    resource: Ger\Bundle\AwsBundle\Controller\RdsController
-    type:     rest
-

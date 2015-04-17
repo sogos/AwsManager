@@ -1,0 +1,4 @@
+rds_resources:
+    resource: Sogos\Bundle\AwsBundle\Controller\RdsController
+    type:     rest
+

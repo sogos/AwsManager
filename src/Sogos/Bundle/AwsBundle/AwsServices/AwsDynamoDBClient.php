@@ -1,6 +1,6 @@
 <?php
 
-namespace Ger\Bundle\AwsBundle\AwsServices;
+namespace Sogos\Bundle\AwsBundle\AwsServices;
 
 
 use Aws\DynamoDb\DynamoDbClient;

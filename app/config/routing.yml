@@ -1,5 +1,5 @@
 ger_aws:
-    resource: "@GerAwsBundle/Resources/config/routing.yml"
+    resource: "@SogosAwsBundle/Resources/config/routing.yml"
     prefix:   /api/
 
 

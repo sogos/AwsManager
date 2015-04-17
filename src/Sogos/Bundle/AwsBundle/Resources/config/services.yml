@@ -1,0 +1,6 @@
+services:
+    sogos_aws.rds_client:
+        class: Sogos\Bundle\AwsBundle\AwsServices\AwsRdsClient
+        arguments: ["@sogos_aws.iam_client"]
+    sogos_aws.iam_client:
+        class: Sogos\Bundle\AwsBundle\AwsServices\AwsIamClient

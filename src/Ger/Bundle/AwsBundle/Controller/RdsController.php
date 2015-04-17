@@ -22,6 +22,7 @@ class RdsController extends Controller
      * @Route("/rds/{region}")
      * @Template("GerAwsBundle:Default:rds_instances.html.twig")
      * @ApiDoc(
+     *  section="RDS",
      *  resource=true,
      *  description="Get All RDS DB Instances in One Region",
      *  filters={
@@ -39,6 +40,7 @@ class RdsController extends Controller
      * @return \Guzzle\Service\Resource\Model
      * @Route("/rds/{region}/{name}")
      * @ApiDoc(
+     *  section="RDS",
      *  resource=true,
      *  description="Get One RDS DB Instance in One Region by Name",
      *  filters={
@@ -58,6 +60,7 @@ class RdsController extends Controller
      * @Route("/rds/{region}/{name}/tags")
      * @Template("GerAwsBundle:Default:rds_tags.html.twig")
      * @ApiDoc(
+     *  section="RDS",
      *  resource=true,
      *  description="Get All Tags for one Instance in one region by Name",
      *  filters={

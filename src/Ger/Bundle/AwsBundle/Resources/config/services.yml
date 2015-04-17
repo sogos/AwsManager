@@ -1,0 +1,6 @@
+services:
+    ger_aws.rds_client:
+        class: Ger\Bundle\AwsBundle\AwsServices\AwsRdsClient
+        arguments: ["@ger_aws.iam_client"]
+    ger_aws.iam_client:
+        class: Ger\Bundle\AwsBundle\AwsServices\AwsIamClient

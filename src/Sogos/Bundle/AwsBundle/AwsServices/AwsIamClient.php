@@ -1,23 +1,19 @@
 <?php
 
-
 namespace Sogos\Bundle\AwsBundle\AwsServices;
 
 use Aws\Iam\IamClient;
 
-
-class AwsIamClient {
-
+class AwsIamClient
+{
     protected $iamClient;
 
-
-    public function __construct() {
-
+    public function __construct()
+    {
         $this->iamClient = IamClient::factory(array(
             'profile' => 'default',
-            'region'  => 'eu-west-1'
+            'region'  => 'eu-west-1',
         ));
-
     }
 
     /**
@@ -35,6 +31,7 @@ class AwsIamClient {
     {
         $user_data =  $this->iamClient->getUser();
         $user = $user_data->get('User');
+
         return $user;
     }
 
@@ -47,6 +44,7 @@ class AwsIamClient {
         $arn_user = $user['Arn'];
         preg_match("/arn\:aws\:iam\:\:(.*)\:user.*/", $arn_user, $match);
         $account_id = $match[1];
+
         return $account_id;
     }
 }

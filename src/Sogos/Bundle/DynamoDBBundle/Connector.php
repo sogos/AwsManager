@@ -2,14 +2,12 @@
 
 namespace Sogos\Bundle\DynamoDBBundle;
 
-
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Exception\ResourceNotFoundException;
 use Monolog\Logger;
 
-class Connector {
-
-
+class Connector
+{
     protected $dynamoDBClient;
     protected $database_name;
     protected $read_capacity_units;
@@ -24,7 +22,7 @@ class Connector {
         $this->write_capacity_units = $write_capacity_units;
         $this->dynamoDBClient = DynamoDbClient::factory(array(
             'profile' => 'default',
-            'region'  => $region
+            'region'  => $region,
         ));
     }
 
@@ -36,69 +34,69 @@ class Connector {
         return $this->database_name;
     }
 
-    public function createTable() {
-        if(!$this->checkIfTableExists()) {
+    public function createTable()
+    {
+        if (!$this->checkIfTableExists()) {
             $this->dynamoDBClient->createTable(array(
                 'TableName' => $this->database_name,
                 'AttributeDefinitions' => array(
                     array(
                         'AttributeName' => 'id',
-                        'AttributeType' => 'N'
+                        'AttributeType' => 'N',
                     ),
                     array(
                         'AttributeName' => 'time',
-                        'AttributeType' => 'N'
-                    )
+                        'AttributeType' => 'N',
+                    ),
                 ),
                 'KeySchema' => array(
                     array(
                         'AttributeName' => 'id',
-                        'KeyType'       => 'HASH'
+                        'KeyType'       => 'HASH',
                     ),
                     array(
                         'AttributeName' => 'time',
-                        'KeyType'       => 'RANGE'
-                    )
+                        'KeyType'       => 'RANGE',
+                    ),
                 ),
                 'ProvisionedThroughput' => array(
                     'ReadCapacityUnits'  => $this->read_capacity_units,
-                    'WriteCapacityUnits' => $this->write_capacity_units
-                )
+                    'WriteCapacityUnits' => $this->write_capacity_units,
+                ),
             ));
             $this->dynamoDBClient->waitUntil('TableExists', array(
-                'TableName' => $this->database_name
+                'TableName' => $this->database_name,
             ));
         }
     }
 
-    public function destroyTable() {
-        if($this->checkIfTableExists()) {
+    public function destroyTable()
+    {
+        if ($this->checkIfTableExists()) {
             $this->dynamoDBClient->deleteTable(
               array(
-                  'TableName' => $this->database_name
+                  'TableName' => $this->database_name,
               )
             );
             $this->dynamoDBClient->waitUntil('TableNotExists', array(
-                'TableName' => $this->database_name
+                'TableName' => $this->database_name,
             ));
-
         }
     }
-
 
     /**
      * @return bool
      */
-    public function checkIfTableExists() {
+    public function checkIfTableExists()
+    {
         try {
             $this->dynamoDBClient->describeTable(
                 array('TableName' => $this->database_name)
             );
-        } catch(ResourceNotFoundException $e) {
+        } catch (ResourceNotFoundException $e) {
             return false;
         }
+
         return true;
-
     }
-
 }

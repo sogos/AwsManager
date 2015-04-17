@@ -9,10 +9,9 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\Route;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-
 /**
- * Class RdsController
- * @package Sogos\Bundle\AwsBundle\Controller
+ * Class RdsController.
+ *
  * @RouteResource("rds")
  */
 class RdsController extends Controller
@@ -22,13 +21,13 @@ class RdsController extends Controller
      * @Route("/rds/{region}")
      * @Template("SogosAwsBundle:Default:rds_instances.html.twig")
      * @ApiDoc(
-     *  section="RDS",
-     *  resource=true,
-     *  description="Get All RDS DB Instances in One Region",
-     *  filters={
-     *      {"name"="region", "dataType"="string"}
-     *  }
-     * )
+     *                                        section="RDS",
+     *                                        resource=true,
+     *                                        description="Get All RDS DB Instances in One Region",
+     *                                        filters={
+     *                                        {"name"="region", "dataType"="string"}
+     *                                        }
+     *                                        )
      */
     public function getAllInstancesByRegionAction($region)
     {
@@ -37,16 +36,17 @@ class RdsController extends Controller
 
     /**
      * @param $name
+     *
      * @return \Guzzle\Service\Resource\Model
      * @Route("/rds/{region}/{name}")
      * @ApiDoc(
-     *  section="RDS",
-     *  resource=true,
-     *  description="Get One RDS DB Instance in One Region by Name",
-     *  filters={
-     *      {"name"="region", "dataType"="string"}
-     *  }
-     * )
+     *                                        section="RDS",
+     *                                        resource=true,
+     *                                        description="Get One RDS DB Instance in One Region by Name",
+     *                                        filters={
+     *                                        {"name"="region", "dataType"="string"}
+     *                                        }
+     *                                        )
      */
     public function getOneInstanceByRegionAction($region, $name)
     {
@@ -56,17 +56,18 @@ class RdsController extends Controller
     /**
      * @param $name
      * @param $region
+     *
      * @return \Guzzle\Service\Resource\Model
      * @Route("/rds/{region}/{name}/tags")
      * @Template("SogosAwsBundle:Default:rds_tags.html.twig")
      * @ApiDoc(
-     *  section="RDS",
-     *  resource=true,
-     *  description="Get All Tags for one Instance in one region by Name",
-     *  filters={
-     *      {"name"="region", "dataType"="string"}
-     *  }
-     * )
+     *                                        section="RDS",
+     *                                        resource=true,
+     *                                        description="Get All Tags for one Instance in one region by Name",
+     *                                        filters={
+     *                                        {"name"="region", "dataType"="string"}
+     *                                        }
+     *                                        )
      */
     public function getOneInstanceTagsByRegionAction($region, $name)
     {
@@ -74,10 +75,8 @@ class RdsController extends Controller
 
         try {
             return array('data' => $this->container->get('Sogos_aws.rds_client')->getResourceTagsforDBInstance($region, $name));
-        } catch(DBInstanceNotFoundException $e ) {
+        } catch (DBInstanceNotFoundException $e) {
             throw new DBInstanceNotFoundException($e->getMessage(), 500);
         }
-
-
     }
 }

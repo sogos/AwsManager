@@ -3,6 +3,7 @@
 namespace Sogos\Bundle\AwsBundle\Documents;
 
 use Sogos\Bundle\DynamoDBBundle\Annotations\DynamoDBDocument;
+use Sogos\Bundle\DynamoDBBundle\Annotations\DynamoDBKey;
 
 /**
  * Class RdsInstances.
@@ -11,23 +12,15 @@ use Sogos\Bundle\DynamoDBBundle\Annotations\DynamoDBDocument;
  */
 class RdsInstances
 {
-    protected $id;
     protected $name;
     protected $storage_type;
     protected $multi_az;
     protected $tags;
+    protected $region;
 
     public function __construct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -40,10 +33,20 @@ class RdsInstances
 
     /**
      * @return mixed
+     * @DynamoDBKey(index_level="secondary", type="hash")
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     * @DynamoDBKey(index_level="primary", type="hash")
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 
     /**
@@ -74,6 +77,18 @@ class RdsInstances
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param $region
+     *
+     * @return $this
+     */
+    public function setRegion($region)
+    {
+        $this->name = $region;
 
         return $this;
     }

@@ -31,13 +31,25 @@ class VerifyMappingCommand extends ContainerAwareCommand
                 // Determine Bundle Root Namespace
                 $bundle_class =  new \ReflectionClass($fqdn_bundle);
                 $bundle_namespace = $bundle_class->getNamespaceName();
-
-                $output->writeln($bundle_namespace);
                 foreach ($finder as $file) {
-                    $reflectionClass = new \ReflectionClass($bundle_namespace.'\Documents\\'.$file->getBasename('.php'));
+                    $class = $bundle_namespace.'\Documents\\'.$file->getBasename('.php');
+                    $reflectionClass = new \ReflectionClass($class);
                     $classAnnotations = $annotationReader->getClassAnnotations($reflectionClass);
                     if (!empty($classAnnotations)) {
-                        print_r($classAnnotations);
+                        $output->writeln(sprintf('<info>[Found]</info> Found DynamoDB Document: <info>%s</info> in bundle: %s ', $file->getBasename('.php'), $bundle_key));
+                        foreach ($reflectionClass->getMethods() as $method) {
+                            $methodsAnnotations = $annotationReader->getMethodAnnotations(new \ReflectionMethod($class, $method->getName()));
+                            if (!empty($methodsAnnotations)) {
+                                foreach ($methodsAnnotations as $methodAnnotation) {
+                                    $baseAnnotationClassReflection = new \ReflectionClass($methodAnnotation);
+                                    $baseAnnotationClassProperties = $baseAnnotationClassReflection->getProperties();
+                                    foreach ($baseAnnotationClassProperties as $property) {
+                                        $property_name = $property->getName();
+                                        $output->writeln(sprintf(' >>> Found annotation %s on method: %s() with name <info>%s</info> and value: <info>%s</info>', get_class($methodAnnotation), $method->getName(), $property_name, $methodAnnotation->$property_name));
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             } catch (\InvalidArgumentException $e) {

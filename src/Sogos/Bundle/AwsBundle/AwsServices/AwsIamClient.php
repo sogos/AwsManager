@@ -14,7 +14,7 @@ class AwsIamClient
         $this->region = $region;
         $this->iamClient = IamClient::factory(array(
             'profile' => 'default',
-            'region'  => $region
+            'region'  => $region,
         ));
     }
 

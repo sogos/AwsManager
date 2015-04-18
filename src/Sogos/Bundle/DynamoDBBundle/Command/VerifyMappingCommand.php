@@ -25,28 +25,23 @@ class VerifyMappingCommand extends ContainerAwareCommand
         $annotationReader = new AnnotationReader();
         foreach ($bundles as $bundle_key => $fqdn_bundle) {
             try {
-                $path = $container->get('kernel')->locateResource('@' . $bundle_key . '/Documents');
+                $path = $container->get('kernel')->locateResource('@'.$bundle_key.'/Documents');
                 $finder = new Finder();
                 $finder->files()->name('*.php')->in($path);
                 // Determine Bundle Root Namespace
                 $bundle_class =  new \ReflectionClass($fqdn_bundle);
-                $bundle_namespace= $bundle_class->getNamespaceName();
+                $bundle_namespace = $bundle_class->getNamespaceName();
 
                 $output->writeln($bundle_namespace);
                 foreach ($finder as $file) {
-                    $reflectionClass = new \ReflectionClass($bundle_namespace . '\Documents\\' . $file->getBasename('.php'));
+                    $reflectionClass = new \ReflectionClass($bundle_namespace.'\Documents\\'.$file->getBasename('.php'));
                     $classAnnotations = $annotationReader->getClassAnnotations($reflectionClass);
-                    if(!empty($classAnnotations)) {
+                    if (!empty($classAnnotations)) {
                         print_r($classAnnotations);
                     }
-
                 }
             } catch (\InvalidArgumentException $e) {
-
             }
-
         }
-
-
     }
 }

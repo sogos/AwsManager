@@ -21,9 +21,11 @@ class SogosDynamoDBExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
         $container->setParameter('sogos_dynamo_db.connector.region', $config['region']);
         $container->setParameter('sogos_dynamo_db.connector.dynamodb_read_capacity_units', $config['read_capacity_units']);
         $container->setParameter('sogos_dynamo_db.connector.dynamodb_write_capacity_units', $config['write_capacity_units']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

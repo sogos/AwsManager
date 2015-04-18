@@ -6,13 +6,15 @@ use Aws\Iam\IamClient;
 
 class AwsIamClient
 {
+    protected $region;
     protected $iamClient;
 
-    public function __construct()
+    public function __construct($region)
     {
+        $this->region = $region;
         $this->iamClient = IamClient::factory(array(
             'profile' => 'default',
-            'region'  => 'eu-west-1',
+            'region'  => $region
         ));
     }
 

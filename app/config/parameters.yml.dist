@@ -1,8 +1,9 @@
 # This file is a "template" of what your parameters.yml file should look like
 parameters:
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
-
+    dynamodb_database_name: aws_manager
+    aws_default_region: eu-west-1
+    dynamodb_read_capacity_units: 20
+    dynamodb_write_capacity_units: 20
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~

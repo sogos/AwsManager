@@ -52,9 +52,12 @@ swiftmailer:
     spool:     { type: memory }
 
 
+sogos_aws:
+    region: "%aws_default_region%"
+
 sogos_dynamo_db:
     database_name: "%%dynamodb_database_name%"
-    region: "%%dynamodb_region%%"
+    region: "%aws_default_region%"
     read_capacity_units: "%dynamodb_read_capacity_units%"
     write_capacity_units: "%dynamodb_write_capacity_units%"
 

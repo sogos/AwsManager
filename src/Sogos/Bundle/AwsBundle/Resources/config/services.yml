@@ -1,6 +1,10 @@
 services:
     sogos_aws.rds_client:
         class: Sogos\Bundle\AwsBundle\AwsServices\AwsRdsClient
-        arguments: ["@sogos_aws.iam_client"]
+        arguments: ["%sogos_aws.default.region%", "@sogos_aws.iam_client", ]
     sogos_aws.iam_client:
         class: Sogos\Bundle\AwsBundle\AwsServices\AwsIamClient
+        arguments: ["%sogos_aws.default.region%"]
+    sogos_aws.dynamodb_client:
+        class: Sogos\Bundle\AwsBundle\AwsServices\AwsDynamoDBClient
+        arguments: ["%sogos_aws.default.region%", "@sogos_aws.iam_client", ]

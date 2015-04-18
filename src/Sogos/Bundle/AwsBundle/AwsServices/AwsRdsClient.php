@@ -7,15 +7,16 @@ use Aws\Rds\RdsClient;
 class AwsRdsClient
 {
     protected $rdsClient;
+    protected $region;
     protected $awsIamClient;
 
     /**
      * @param AwsIamClient $awsIamClient
      */
-    public function __construct(AwsIamClient $awsIamClient)
+    public function __construct($region, AwsIamClient $awsIamClient)
     {
         $this->awsIamClient = $awsIamClient;
-
+        $this->region = $region;
         $this->rdsClient = RdsClient::factory(array(
             'profile' => 'default',
             'region'  => 'eu-west-1',

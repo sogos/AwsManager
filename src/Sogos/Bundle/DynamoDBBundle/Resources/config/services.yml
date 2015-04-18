@@ -1,4 +1,4 @@
 services:
     sogos_dynamo_db.connector:
         class: Sogos\Bundle\DynamoDBBundle\Connector
-        arguments: ["@logger", %dynamodb_database_name%, %dynamodb_region%, %dynamodb_read_capacity_units%, %dynamodb_write_capacity_units%]
+        arguments: ["@logger", %dynamodb_database_name%, "%sogos_dynamo_db.connector.region%", "%sogos_dynamo_db.connector.dynamodb_read_capacity_units%", "%sogos_dynamo_db.connector.dynamodb_write_capacity_units%"]

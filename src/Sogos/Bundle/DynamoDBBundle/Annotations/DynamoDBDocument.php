@@ -10,4 +10,5 @@ use Doctrine\Common\Annotations\Annotation;
 class DynamoDBDocument
 {
     public $resource;
+    public $name;
 }

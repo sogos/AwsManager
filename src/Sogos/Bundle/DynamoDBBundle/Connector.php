@@ -34,52 +34,34 @@ class Connector
         return $this->database_name;
     }
 
-    public function createTable()
+    /**
+     * @return DynamoDbClient
+     */
+    public function getDynamoDBClient()
     {
-        if (!$this->checkIfTableExists()) {
-            $this->dynamoDBClient->createTable(array(
-                'TableName' => $this->database_name,
-                'AttributeDefinitions' => array(
-                    array(
-                        'AttributeName' => 'id',
-                        'AttributeType' => 'N',
-                    ),
-                    array(
-                        'AttributeName' => 'time',
-                        'AttributeType' => 'N',
-                    ),
-                ),
-                'KeySchema' => array(
-                    array(
-                        'AttributeName' => 'id',
-                        'KeyType'       => 'HASH',
-                    ),
-                    array(
-                        'AttributeName' => 'time',
-                        'KeyType'       => 'RANGE',
-                    ),
-                ),
-                'ProvisionedThroughput' => array(
-                    'ReadCapacityUnits'  => $this->read_capacity_units,
-                    'WriteCapacityUnits' => $this->write_capacity_units,
-                ),
-            ));
+        return $this->dynamoDBClient;
+    }
+
+    public function createTable($tableName, $schema)
+    {
+        if (!$this->checkIfTableExists($tableName)) {
+            $this->dynamoDBClient->createTable($schema);
             $this->dynamoDBClient->waitUntil('TableExists', array(
-                'TableName' => $this->database_name,
+                'TableName' => $tableName,
             ));
         }
     }
 
-    public function destroyTable()
+    public function destroyTable($tableName)
     {
-        if ($this->checkIfTableExists()) {
+        if ($this->checkIfTableExists($tableName)) {
             $this->dynamoDBClient->deleteTable(
               array(
-                  'TableName' => $this->database_name,
+                  'TableName' => $tableName,
               )
             );
             $this->dynamoDBClient->waitUntil('TableNotExists', array(
-                'TableName' => $this->database_name,
+                'TableName' => $tableName,
             ));
         }
     }
@@ -87,11 +69,11 @@ class Connector
     /**
      * @return bool
      */
-    public function checkIfTableExists()
+    public function checkIfTableExists($tableName)
     {
         try {
             $this->dynamoDBClient->describeTable(
-                array('TableName' => $this->database_name)
+                array('TableName' => $tableName)
             );
         } catch (ResourceNotFoundException $e) {
             return false;

@@ -52,7 +52,7 @@ class AwsRdsClient
 
         $instanceCollection = new ArrayCollection();
         foreach($instances->get('DBInstances') as $instance) {
-            var_dump($instance);
+            //var_dump($instance);
             $rdsDBInstance = new RdsInstances();
             $rdsDBInstance
                 ->setRegion($region)
@@ -60,7 +60,7 @@ class AwsRdsClient
                 ->setName($instance['DBInstanceIdentifier'])
                 ->setInstanceType($instance['DBInstanceClass'])
                 ->setEndpoint($instance['Endpoint']['Address'])
-                ->setPortEndpoint($instance['Endpoint']['Address'])
+                ->setPortEndpoint($instance['Endpoint']['Port'])
                 ->setAllocatedStorage($instance['AllocatedStorage'])
                 ->setStorageType($instance['StorageType'])
                 ->setEngine($instance['Engine'])
@@ -72,6 +72,7 @@ class AwsRdsClient
                 ->setPreferredBackupWindow($instance['PreferredBackupWindow'])
                 ->setPreferredMaintenanceWindow($instance['PreferredMaintenanceWindow'])
                 ->setMasterUserName($instance['MasterUsername'])
+                ->setInstanceCreateTime($instance['InstanceCreateTime'])
 
             ;
 

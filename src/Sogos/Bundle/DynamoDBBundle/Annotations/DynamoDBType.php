@@ -11,4 +11,5 @@ class DynamoDBType
 {
     public $type;
     public $target;
+
 }

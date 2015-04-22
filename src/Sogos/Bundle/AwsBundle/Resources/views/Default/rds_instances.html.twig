@@ -8,14 +8,13 @@
         <thead>
             <tr>
                 <th>DBInstanceIdentifier</th>
-                <th>DBInstanceClass</th>
+                <th>Instance Class</th>
                 <th>MasterUsername</th>
                 <th>AvailabilityZone</th>
-                <th>AllocatedStorage</th>
                 <th>Engine</th>
-                <th>EngineVersion</th>
                 <th>InstanceCreateTime</th>
-                <th>Iops</th>
+                <th>AllocatedStorage</th>
+                <th>Storage Type</th>
 
             </tr>
         </thead>
@@ -24,32 +23,33 @@
         <tr>
                 <td>{{ DBInstance.name }}
                     {% if DBInstance.readReplicaParent|length > 0 %}
-                     <small>Replica of: {{ DBInstance.readReplicaParent }}</small>
+                    <span class="label label-info"><i class="fa fa-files-o"></i> {{ DBInstance.readReplicaParent }}</span>
                     {% endif %}
                 </td>
                 <td><span class="label label-warning">{{ DBInstance.instanceType }}</span></td>
                 <td>{{ DBInstance.masterUsername }}</td>
             <td>{{ DBInstance.AvailabilityZone }}</td>
-            <td>{{ DBInstance.AllocatedStorage }} Go</td>
-            <td>{{ DBInstance.Engine }}</td>
-            <td>{{ DBInstance.EngineVersion }}</td>
+            <td><span class="label label-default">{{ DBInstance.Engine }} {{ DBInstance.EngineVersion }}</span></td>
             <td>{{ DBInstance.InstanceCreateTime|date }}</td>
-            <td>{% if DBInstance.Iops is defined %}{{ DBInstance.Iops }} {% endif %}</td>
+            <td><span class="label label-default">{{ DBInstance.AllocatedStorage }} Go</span></td>
+            <td>{{ DBInstance.storageType }}{% if DBInstance.Iops is defined %} <span class="label label-default">{{ DBInstance.Iops }}</span>{% endif %}</td>
 
 
         </tr>
         <tr>
-            <th><small>Endpoint</small></th>
-            <td colspan="8"><small>{{ DBInstance.Endpoint }}:{{ DBInstance.PortEndpoint }}</small></td>
+            <td></td>
+            <th class="success"><small>Endpoint</small></th>
+            <td colspan="7"  class="success"><small>{{ DBInstance.Endpoint }}:{{ DBInstance.PortEndpoint }}</small></td>
         </tr>
         {% if DBInstance.readReplicas|length > 0 %}
         <tr>
-            <th><small>Read Replicas</small></th>
-            <td colspan="8">
+            <td></td>
+            <th  class="info"><small>Read Replicas</small></th>
+            <td colspan="7" class="info">
                 <small>
-                    <ul>
+                    <ul class="list-group">
                         {%  for replica in DBInstance.readReplicas %}
-                        <li>{{ replica }}</li>
+                        <li class="list-group-item"><i class="fa fa-files-o"></i> {{ replica|split(":")[6] }}</li>
                         {% endfor %}
                     </ul>
                 </small>

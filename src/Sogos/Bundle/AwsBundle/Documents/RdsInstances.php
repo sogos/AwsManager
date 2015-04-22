@@ -10,147 +10,147 @@ use JMS\Serializer\Annotation\Accessor;
 /**
  * Class RdsInstances.
  *
- * @DynamoDBDocument(resource="yes")
+ * @DynamoDBDocument(resource="yes", name="rds")
  */
 class RdsInstances
 {
 
     /**
+     * @var string $region
+     * @DynamoDBKey(index_level="primary", type="HASH")
+     * @DynamoDBType(type="S")
+     */
+    protected $region;
+    /**
      * @var string $arn
-     * @DynamoDBKey(index_level="primary", type="hash")
-     * @DynamoDBType(type="string")
+     * @DynamoDBKey(index_level="primary", type="RANGE")
+     * @DynamoDBType(type="S")
      * @Accessor(getter="getArn")
      */
     protected $arn;
-    /**
-     * @var string $account_id
-     * @DynamoDBKey(index_level="primary", type="hash")
-     * @DynamoDBType(type="string")
-     */
-    protected $account_id;
 
     /**
+     * @var string $account_id
+     * @DynamoDBKey(index_level="global_secondary", type="HASH", index_name="account", projection_type="KEYS_ONLY", read_capacity_units=1, write_capacity_units=1)
+     * @DynamoDBType(type="S")
+     */
+    protected $account_id;
+    /**
      * @var string $name
-     * @DynamoDBType(type="string")
-     * @DynamoDBKey(index_level="secondary", type="hash")
+     * @DynamoDBType(type="S")
+     * @DynamoDBKey(index_level="global_secondary", type="HASH", index_name="name", projection_type="KEYS_ONLY", read_capacity_units=1, write_capacity_units=1)
      */
     protected $name;
     /**
      * @var string $storage_type
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $storage_type;
     /**
      * @var bool $multi_az
-     * @DynamoDBType(type="bool")
+     * @DynamoDBType(type="S")
      */
     protected $multi_az;
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $tags
-     * @DynamoDBType(type="collection", target="Sogos\Bundle\AwsBundle\Documents\Tag")
+     * @DynamoDBType(type="BS", target="Sogos\Bundle\AwsBundle\Documents\Tag")
      */
 
     protected $tags;
     /**
      * @var string $availability_zone;
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      *
      */
     protected $availability_zone;
     /**
      * @var string $status
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $status;
     /**
      * @var integer $retention_period
-     * @DynamoDBType(type="integer")
+     * @DynamoDBType(type="N")
      */
     protected $retention_period;
     /**
-     * @var string $region
-     * @DynamoDBKey(index_level="primary", type="hash")
-     * @DynamoDBType(type="string")
-     */
-    protected $region;
-    /**
      * @var string $instance_type
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $instance_type;
     /**
      * @var string $endpoint
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $endpoint;
     /**
      * @var string $port_endpoint
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $port_endpoint;
     /**
      * @var string $engine
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $engine;
     /**
      * @var string $engine_version
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $engine_version;
     /**
      * @var string $licence
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $licence;
     /**
      * @var integer $allocated_storage
-     * @DynamoDBType(type="integer")
+     * @DynamoDBType(type="N")
      */
     protected $allocated_storage;
     /**
      * @var \Datetime $instance_create_time
-     * @DynamoDBType(type="datetime")
+     * @DynamoDBType(type="N")
      */
     protected $instance_create_time;
     /**
      * @var integer $iops
-     * @DynamoDBType(type="integer")
+     * @DynamoDBType(type="N")
      */
     protected $iops;
     /**
      * @var bool $read_replica
-     * @DynamoDBType(type="bool")
+     * @DynamoDBType(type="BOOL")
      */
     protected $read_replica;
     /**
      * @var string $read_replica_parent
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $read_replica_parent;
     /**
      * @var string $preferred_backup_window
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $preferred_backup_window;
     /**
      * @var string $preferred_maintenance_window
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $preferred_maintenance_window;
     /**
      * @var string $latest_restorable_time
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $latest_restorable_time;
     /**
      * @var string $master_user_name;
-     * @DynamoDBType(type="string")
+     * @DynamoDBType(type="S")
      */
     protected $master_user_name;
     /**
      * @var \Array $read_replicas
-     * @DynamoDBType(type="array")
+     * @DynamoDBType(type="SS")
      *
      */
     protected $read_replicas;

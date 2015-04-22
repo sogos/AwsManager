@@ -3,6 +3,8 @@
 namespace Sogos\Bundle\AwsBundle\Controller;
 
 use Aws\Rds\Exception\DBInstanceNotFoundException;
+use Sogos\Bundle\AwsBundle\Documents\RdsInstances;
+use Sogos\Bundle\AwsBundle\Documents\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -31,7 +33,9 @@ class RdsController extends Controller
      */
     public function getAllInstancesByRegionAction($region)
     {
-        return array('region' => $region, 'data' => $this->container->get('Sogos_aws.rds_client')->getDBInstances($region));
+        $accountId = $this->container->get('sogos_aws.iam_client')->getAccountId();
+
+        return array('region' => $region, 'instances' => $this->container->get('Sogos_aws.rds_client')->getDBInstances($region));
     }
 
     /**

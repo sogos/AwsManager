@@ -20,23 +20,42 @@
             </tr>
         </thead>
         <tbody>
-    {% for DBInstance in data.get('DBInstances') %}
+    {% for DBInstance in instances %}
         <tr>
-                <td>{{ DBInstance.DBInstanceIdentifier }}</td>
-                <td><span class="label label-warning">{{ DBInstance.DBInstanceClass }}</span></td>
-                <td>{{ DBInstance.MasterUsername }}</td>
-                <td>{{ DBInstance.AvailabilityZone }}</td>
-                <td>{{ DBInstance.AllocatedStorage }} Go</td>
-                <td>{{ DBInstance.Engine }}</td>
-                <td>{{ DBInstance.EngineVersion }}</td>
-                <td>{{ DBInstance.InstanceCreateTime|date }}</td>
-                <td>{% if DBInstance.Iops is defined %}{{ DBInstance.Iops }} {% endif %}</td>
+                <td>{{ DBInstance.name }}
+                    {% if DBInstance.readReplicaParent|length > 0 %}
+                     <small>Replica of: {{ DBInstance.readReplicaParent }}</small>
+                    {% endif %}
+                </td>
+                <td><span class="label label-warning">{{ DBInstance.instanceType }}</span></td>
+                <td>{{ DBInstance.masterUsername }}</td>
+            <td>{{ DBInstance.AvailabilityZone }}</td>
+            <td>{{ DBInstance.AllocatedStorage }} Go</td>
+            <td>{{ DBInstance.Engine }}</td>
+            <td>{{ DBInstance.EngineVersion }}</td>
+            <td>{{ DBInstance.InstanceCreateTime|date }}</td>
+            <td>{% if DBInstance.Iops is defined %}{{ DBInstance.Iops }} {% endif %}</td>
+
 
         </tr>
         <tr>
-            <th>Endpoint</th    >
-            <td colspan="8"><small>{{ DBInstance.Endpoint.Address }}:{{ DBInstance.Endpoint.Port }}</small></td>
+            <th><small>Endpoint</small></th>
+            <td colspan="8"><small>{{ DBInstance.Endpoint }}:{{ DBInstance.PortEndpoint }}</small></td>
         </tr>
+        {% if DBInstance.readReplicas|length > 0 %}
+        <tr>
+            <th><small>Read Replicas</small></th>
+            <td colspan="8">
+                <small>
+                    <ul>
+                        {%  for replica in DBInstance.readReplicas %}
+                        <li>{{ replica }}</li>
+                        {% endfor %}
+                    </ul>
+                </small>
+            </td>
+        </tr>
+        {% endif %}
     {% endfor %}
         </tbody>
     </table>

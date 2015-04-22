@@ -3,6 +3,8 @@
 namespace Sogos\Bundle\AwsBundle\AwsServices;
 
 use Aws\Rds\RdsClient;
+use Doctrine\Common\Collections\ArrayCollection;
+use Sogos\Bundle\AwsBundle\Documents\RdsInstances;
 
 class AwsRdsClient
 {
@@ -40,13 +42,67 @@ class AwsRdsClient
     {
         $this->rdsClient->setRegion($region);
         if ($instanceName) {
-            return $this->rdsClient->describeDBInstances(
+            $instances = $this->rdsClient->describeDBInstances(
                 array('DBInstanceIdentifier' => $instanceName)
             );
         } else {
-            return $this->rdsClient->describeDBInstances(
+            $instances = $this->rdsClient->describeDBInstances(
             );
         }
+
+        $instanceCollection = new ArrayCollection();
+        foreach($instances->get('DBInstances') as $instance) {
+            var_dump($instance);
+            $rdsDBInstance = new RdsInstances();
+            $rdsDBInstance
+                ->setRegion($region)
+                ->setAccountId($this->awsIamClient->getAccountId())
+                ->setName($instance['DBInstanceIdentifier'])
+                ->setInstanceType($instance['DBInstanceClass'])
+                ->setEndpoint($instance['Endpoint']['Address'])
+                ->setPortEndpoint($instance['Endpoint']['Address'])
+                ->setAllocatedStorage($instance['AllocatedStorage'])
+                ->setStorageType($instance['StorageType'])
+                ->setEngine($instance['Engine'])
+                ->setEngineVersion($instance['EngineVersion'])
+                ->setLicence($instance['LicenseModel'])
+                ->setAvailabilityZone($instance['AvailabilityZone'])
+                ->setStatus($instance['DBInstanceStatus'])
+                ->setRetentionPeriod($instance['BackupRetentionPeriod'])
+                ->setPreferredBackupWindow($instance['PreferredBackupWindow'])
+                ->setPreferredMaintenanceWindow($instance['PreferredMaintenanceWindow'])
+                ->setMasterUserName($instance['MasterUsername'])
+
+            ;
+
+                if(array_key_exists('LatestRestorableTime', $instance)) {
+                    $rdsDBInstance
+                        ->setLatestRestorableTime($instance['LatestRestorableTime'])
+                    ;
+                }
+                if(array_key_exists('Iops', $instance)) {
+                    $rdsDBInstance
+                        ->setIops($instance['Iops'])
+                        ;
+                }
+
+                if(array_key_exists('ReadReplicaDBInstanceIdentifiers', $instance)) {
+                    foreach($instance['ReadReplicaDBInstanceIdentifiers'] as $replica) {
+                        $rdsDBInstance
+                            ->addReadReplica('arn:aws:rds:'.$region.':'.$this->awsIamClient->getAccountId().':db:'. $replica);
+                    }
+                }
+
+                if(array_key_exists('ReadReplicaSourceDBInstanceIdentifier', $instance)) {
+                    $rdsDBInstance
+                        ->setReadReplicaParent($instance['ReadReplicaSourceDBInstanceIdentifier']);
+                }
+
+
+
+            $instanceCollection->add($rdsDBInstance);
+        }
+        return $instanceCollection;
     }
 
     /**
@@ -64,4 +120,6 @@ class AwsRdsClient
 
         return $tag_list->toArray();
     }
+
+
 }

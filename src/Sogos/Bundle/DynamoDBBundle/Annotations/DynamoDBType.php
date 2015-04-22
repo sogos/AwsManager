@@ -10,5 +10,5 @@ use Doctrine\Common\Annotations\Annotation;
 class DynamoDBType
 {
     public $type;
-    public $of;
+    public $target;
 }

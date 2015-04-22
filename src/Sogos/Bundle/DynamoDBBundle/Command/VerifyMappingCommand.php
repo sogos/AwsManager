@@ -66,7 +66,8 @@ class VerifyMappingCommand extends ContainerAwareCommand
                                     }
                                 }
                                 if($type) {
-                                    if($type != "bool" && $type != "collection" ) {
+
+                                    if($type != "bool" && $type != "collection" && $type != "array" ) {
                                         $expected_set_method = Inflector::camelize('set_'.$documentProperty->getName());
                                         $expected_get_method = Inflector::camelize('get_'.$documentProperty->getName());
                                         if(!in_array($expected_set_method, $documentMethodsNames)) {
@@ -84,7 +85,7 @@ class VerifyMappingCommand extends ContainerAwareCommand
                                         if (!in_array($expected_get_method, $documentMethodsNames)) {
                                             $output->writeln(sprintf("<error>Expected method %s() not found</error>", $expected_get_method));
                                         }
-                                    } elseif($type == 'collection') {
+                                    } elseif($type == 'collection' || $type == 'array') {
                                         $expected_add_method = Inflector::camelize('add_' . rtrim($documentProperty->getName(),'s'));
                                         $expected_remove_method = Inflector::camelize('remove_' . rtrim($documentProperty->getName(),'s'));
                                         $expected_get_method = Inflector::camelize('get_' . $documentProperty->getName());

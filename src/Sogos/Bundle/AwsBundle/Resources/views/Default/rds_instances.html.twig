@@ -34,12 +34,20 @@
             <td><span class="label label-default">{{ DBInstance.AllocatedStorage }} Go</span></td>
             <td>{{ DBInstance.storageType }}{% if DBInstance.Iops is defined %} <span class="label label-default">{{ DBInstance.Iops }}</span>{% endif %}</td>
 
-
         </tr>
         <tr>
             <td></td>
-            <th class="success"><small>Endpoint</small></th>
-            <td colspan="7"  class="success"><small>{{ DBInstance.Endpoint }}:{{ DBInstance.PortEndpoint }}</small></td>
+            <th><small>Tags</small></th>
+            <td colspan="7">
+                {% for tag in DBInstance.tags %}
+                        <span class="label label-success">{{ tag.keyName }}: {{ tag.value }}</span>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <th><small>Endpoint</small></th>
+            <td colspan="7"><small>{{ DBInstance.Endpoint }}:{{ DBInstance.PortEndpoint }}</small></td>
         </tr>
         {% if DBInstance.readReplicas|length > 0 %}
         <tr>
@@ -55,6 +63,21 @@
                 </small>
             </td>
         </tr>
+        {% endif %}
+        {% if DBInstance.vpcSecurityGroups|length > 0 %}
+            <tr>
+                <td></td>
+                <th  class="warning"><small>VPC Security Groups</small></th>
+                <td colspan="7" class="warning">
+                    <small>
+                        <ul class="list-group">
+                            {%  for vpcSecurityGroup in DBInstance.vpcSecurityGroups %}
+                                <li class="list-group-item">{{ vpcSecurityGroup.vpcSecurityGroupId }}  {{ vpcSecurityGroup.groupName }}</li>
+                            {% endfor %}
+                        </ul>
+                    </small>
+                </td>
+            </tr>
         {% endif %}
     {% endfor %}
         </tbody>

@@ -53,7 +53,7 @@ class RdsInstances
     protected $multi_az;
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection $tags
-     * @DynamoDBType(type="BS", target="Sogos\Bundle\AwsBundle\Documents\Tag")
+     * @DynamoDBType(type="M", target="Sogos\Bundle\AwsBundle\Documents\Tag")
      */
 
     protected $tags;
@@ -154,10 +154,15 @@ class RdsInstances
      *
      */
     protected $read_replicas;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection $vpc_security_groups
+     */
+    protected $vpc_security_groups;
 
     public function __construct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vpc_security_groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->read_replicas = array();
     }
 
@@ -370,6 +375,14 @@ class RdsInstances
     public function getReadReplicas()
     {
         return $this->read_replicas;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getVpcSecurityGroups()
+    {
+        return $this->vpc_security_groups;
     }
 
     /**
@@ -640,6 +653,27 @@ class RdsInstances
         }
         return $this;
     }
+
+    /**
+     * @param VpcSecurityGroup $vpcSecurityGroup
+     * @return $this
+     */
+    public function addVpcSecurityGroup(VpcSecurityGroup $vpcSecurityGroup)
+    {
+        $this->vpc_security_groups->add($vpcSecurityGroup);
+        return $this;
+    }
+
+    /**
+     * @param Tag $tag
+     * @return $this
+     */
+    public function removeVpcSecurityGroup(VpcSecurityGroup $vpcSecurityGroup)
+    {
+        $this->vpc_security_groups->remove($vpcSecurityGroup);
+        return $this;
+    }
+
 
 
 

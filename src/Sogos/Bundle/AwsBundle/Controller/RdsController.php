@@ -33,7 +33,6 @@ class RdsController extends Controller
      */
     public function getAllInstancesByRegionAction($region)
     {
-        $accountId = $this->container->get('sogos_aws.iam_client')->getAccountId();
 
         return array('region' => $region, 'instances' => $this->container->get('Sogos_aws.rds_client')->getDBInstances($region));
     }

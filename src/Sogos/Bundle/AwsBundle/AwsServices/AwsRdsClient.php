@@ -5,23 +5,27 @@ namespace Sogos\Bundle\AwsBundle\AwsServices;
 use Aws\Rds\RdsClient;
 use Doctrine\Common\Collections\ArrayCollection;
 use Sogos\Bundle\AwsBundle\Documents\RdsInstances;
+use Sogos\Bundle\AwsBundle\Documents\Tag;
+use Sogos\Bundle\AwsBundle\Documents\VpcSecurityGroup;
 
 class AwsRdsClient
 {
     protected $rdsClient;
     protected $region;
     protected $awsIamClient;
+    protected $awsEc2Client;
 
     /**
      * @param AwsIamClient $awsIamClient
      */
-    public function __construct($region, AwsIamClient $awsIamClient)
+    public function __construct($region, AwsIamClient $awsIamClient, AwsEc2Client $awsEc2Client)
     {
         $this->awsIamClient = $awsIamClient;
         $this->region = $region;
+        $this->awsEc2Client = $awsEc2Client;
         $this->rdsClient = RdsClient::factory(array(
             'profile' => 'default',
-            'region'  => 'eu-west-1',
+            'region'  => $region,
         ));
     }
 
@@ -99,7 +103,25 @@ class AwsRdsClient
                         ->setReadReplicaParent($instance['ReadReplicaSourceDBInstanceIdentifier']);
                 }
 
+                if(array_key_exists('VpcSecurityGroups', $instance) &&  !empty($instance['VpcSecurityGroups'])) {
+                    $VpcSecurityGroupIds = array();
+                    foreach ($instance['VpcSecurityGroups'] as $InstanceVpcSecurityGroup) {
+                        $VpcSecurityGroupIds[] = $InstanceVpcSecurityGroup['VpcSecurityGroupId'];
+                    }
+                    $VpcSecurityGroupCollection  = $this->awsEc2Client->getVpcSecurityGroups($region, $VpcSecurityGroupIds);
+                    foreach($VpcSecurityGroupCollection as $VpcSecurityGroup) {
+                        $rdsDBInstance->addVpcSecurityGroup($VpcSecurityGroup);
+                    }
+                }
 
+                $tags_response = $this->getResourceTagsforDBInstance($region, $rdsDBInstance->getName());
+                foreach($tags_response as $tag_to_add) {
+                    $tag = new Tag();
+                    $tag->setKeyName($tag_to_add['Key']);
+                    $tag->setValue($tag_to_add['Value']);
+                    $rdsDBInstance
+                        ->addTag($tag);
+                }
 
             $instanceCollection->add($rdsDBInstance);
         }
@@ -119,7 +141,7 @@ class AwsRdsClient
 
         $tag_list =  $this->rdsClient->listTagsForResource(array('ResourceName' => 'arn:aws:rds:'.$region.':'.$account_id.':db:'.$instanceName));
 
-        return $tag_list->toArray();
+        return $tag_list->get('TagList');
     }
 
 
